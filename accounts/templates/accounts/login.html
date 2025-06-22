@@ -1,0 +1,393 @@
+{% extends 'base.html' %}
+
+{% block title %}Kirish - OnlineShop{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="logo-container">
+        <i class="fas fa-shopping-bag logo-icon"></i>
+        <span class="logo-text">OnlineShop</span>
+      </div>
+      <h2>Xush kelibsiz</h2>
+      <p>Hisobingizga kirish uchun ma'lumotlaringizni kiriting</p>
+    </div>
+
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      
+      <div class="form-group floating">
+        <div class="input-with-icon">
+          <i class="fas fa-user input-icon"></i>
+          <input type="text" id="username" name="username" placeholder=" " required>
+          <label for="username">Foydalanuvchi nomi yoki Email</label>
+        </div>
+      </div>
+      
+      <div class="form-group floating">
+        <div class="input-with-icon">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" id="password" name="password" placeholder=" " required>
+          <label for="password">Parol</label>
+          <span class="toggle-password" onclick="togglePassword()">
+            <i class="fas fa-eye"></i>
+          </span>
+        </div>
+      </div>
+      
+      <div class="form-options">
+        <label class="remember-me checkbox-container">
+          <input type="checkbox" name="remember">
+          <span class="checkmark"></span>
+          <span class="checkbox-label">Eslab qolish</span>
+        </label>
+      </div>
+      
+      <button type="submit" class="btn-auth btn-login">
+        <span class="btn-text">Kirish</span>
+        <i class="fas fa-arrow-right btn-icon"></i>
+      </button>
+      
+      <div class="auth-footer">
+        <p>Hisobingiz yo'qmi? <a href="{% url 'register' %}" class="auth-link">Ro'yxatdan o'tish</a></p>
+      </div>
+    </form>
+    
+    <div class="social-login">
+      <div class="divider">
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  :root {
+    --primary: #4361ee;
+    --primary-light: #4895ef;
+    --secondary: #3f37c9;
+    --dark: #1b263b;
+    --darker: #0d1b2a;
+    --light: #f8f9fa;
+    --gray: #adb5bd;
+    --success: #4cc9f0;
+    --error: #f72585;
+    --warning: #f8961e;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    --shadow-primary: 0 4px 14px rgba(67, 97, 238, 0.3);
+    --transition: all 0.3s ease;
+  }
+
+  .dark-mode {
+    --primary: #4895ef;
+    --primary-light: #4cc9f0;
+    --secondary: #4361ee;
+    --dark: #f8f9fa;
+    --darker: #e9ecef;
+    --light: #1b263b;
+    --gray: #6c757d;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light);
+    color: var(--dark);
+    line-height: 1.6;
+  }
+
+  .auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: var(--light);
+    background-image: radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.05), rgba(72, 149, 239, 0.05));
+  }
+
+  .auth-card {
+    background: var(--light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 3rem;
+    width: 100%;
+    max-width: 480px;
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .auth-card:hover {
+    box-shadow: var(--shadow-primary);
+    transform: translateY(-2px);
+  }
+
+  .auth-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .logo-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-right: 0.75rem;
+  }
+
+  .logo-text {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .form-group {
+    position: relative;
+  }
+
+  .input-with-icon {
+    position: relative;
+  }
+
+  .input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray);
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    color: var(--dark);
+    font-size: 1rem;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+  }
+
+  .floating label {
+    position: absolute;
+    left: 3rem;
+    top: 1rem;
+    color: var(--gray);
+    transition: var(--transition);
+    pointer-events: none;
+  }
+
+  .floating input:focus ~ label,
+  .floating input:not(:placeholder-shown) ~ label {
+    top: -10px;
+    left: 2.5rem;
+    font-size: 0.75rem;
+    background: var(--light);
+    padding: 0 0.5rem;
+    color: var(--primary);
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--gray);
+  }
+
+  .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .checkbox-container input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .checkmark {
+    height: 18px;
+    width: 18px;
+    background-color: transparent;
+    border: 1px solid var(--gray);
+    border-radius: 4px;
+    margin-right: 0.75rem;
+  }
+
+  .checkbox-container input:checked ~ .checkmark {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .btn-auth {
+    padding: 1rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-auth:hover {
+    box-shadow: var(--shadow-primary);
+    transform: translateY(-2px);
+  }
+
+  .auth-footer {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--gray);
+    background-color: var(--light);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+  }
+
+  .dark-mode .auth-footer {
+    background-color: var(--dark);
+    color: var(--light);
+  }
+
+  .social-login {
+    margin-top: 2.5rem;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .divider-text {
+    padding: 0 1rem;
+    color: var(--gray);
+    font-size: 0.8rem;
+  }
+
+  .social-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .social-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .social-btn.google {
+    color: #DB4437;
+  }
+
+  .social-btn.facebook {
+    color: #4267B2;
+  }
+</style>
+
+<script>
+  function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.querySelector('.toggle-password i');
+    
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+      passwordInput.type = 'password';
+      toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+  }
+
+  document.querySelectorAll('.floating input').forEach(input => {
+    const label = input.parentNode.querySelector('label');
+    input.addEventListener('focus', () => label.classList.add('active'));
+    input.addEventListener('blur', () => {
+      if (!input.value) label.classList.remove('active');
+    });
+    if (input.value) label.classList.add('active');
+  });
+
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark-mode');
+      const isDark = document.documentElement.classList.contains('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-sun', isDark);
+      icon.classList.toggle('fa-moon', !isDark);
+    });
+
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark-mode');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.replace('fa-moon', 'fa-sun');
+    }
+  }
+</script>
+{% endblock %}

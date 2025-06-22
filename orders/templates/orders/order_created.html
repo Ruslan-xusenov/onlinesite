@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}Buyurtma tasdiqlandi{% endblock %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+                <div class="card-header bg-success text-white py-4">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="bi bi-check-circle-fill display-4 me-3"></i>
+                        <div>
+                            <h1 class="mb-0 fw-bold">Buyurtma muvaffaqiyatli qabul qilindi!</h1>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body p-5">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="p-4 bg-light rounded-3 h-100">
+                                <h3 class="fw-bold mb-4 text-success">
+                                    <i class="bi bi-receipt me-2"></i> Buyurtma ma'lumotlari
+                                </h3>
+                                <ul class="list-unstyled">
+                                    <li class="mb-3 d-flex">
+                                        <span class="me-2 fw-semibold">Buyurtma raqami:</span>
+                                        <span class="badge bg-primary rounded-pill fs-6">#{{ order.id }}</span>
+                                    </li>
+                                    <li class="mb-3">
+                                        <span class="me-2 fw-semibold">Holat:</span>
+                                        <span class="badge bg-{% if order.status == 'Yangi' %}info{% elif order.status == 'Qabul qilindi' %}success{% else %}warning{% endif %} rounded-pill">
+                                            {{ order.status }}
+                                        </span>
+                                    </li>
+                                    <li class="mb-3">
+                                        <span class="me-2 fw-semibold">Sana:</span>
+                                        <span>{{ order.created_at|date:"d.m.Y H:i" }}</span>
+                                    </li>
+                                    <li class="mb-3">
+                                        <span class="me-2 fw-semibold">Umumiy summa:</span>
+                                        <span class="fw-bold">{{ order.total_price|floatformat:"0" }} so'm</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <div class="p-4 bg-light rounded-3 h-100">
+                                <h3 class="fw-bold mb-4 text-success">
+                                    <i class="bi bi-truck me-2"></i> Yetkazib berish
+                                </h3>
+                                <ul class="list-unstyled">
+                                    <li class="mb-3">
+                                        <span class="me-2 fw-semibold">Manzil:</span>
+                                        <span>{{ order.address }}</span>
+                                    </li>
+                                    <li class="mb-3">
+                                        <span class="me-2 fw-semibold">Telefon:</span>
+                                        <span>{{ order.phone }}</span>
+                                    </li>
+                                    <li class="mb-3">
+                                        <span class="me-2 fw-semibold">Yetkazish usuli:</span>
+                                        <span>{{ order.delivery_type }}</span>
+                                    </li>
+                                    <li class="mb-3">
+                                        <span class="me-2 fw-semibold">To'lov usuli:</span>
+                                        <span>{{ order.payment_method }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <p class="lead mb-4">
+                            <i class="bi bi-envelope-check-fill text-success me-2"></i>
+                            Buyurtma ma'lumotlari sizning elektron pochtangizga yuborildi
+                        </p>
+                        
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="/" class="btn btn-primary btn-lg px-4 py-3">
+                                <i class="bi bi-house-door me-2"></i> Bosh sahifaga qaytish
+                            </a>
+                            <a href="{% url 'order_history' %}" class="btn btn-outline-success btn-lg px-4 py-3">
+                                <i class="bi bi-clock-history me-2"></i> Buyurtmalar tarixi
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-light py-3 text-center">
+                    <p class="mb-0 text-muted">
+                        <i class="bi bi-headset me-2"></i> Savollaringiz bo'lsa, biz bilan bog'laning: +998 90 123 45 67
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .badge {
+        font-weight: 500;
+        padding: 0.35em 0.65em;
+    }
+    
+    @media (max-width: 768px) {
+        .d-flex.justify-content-center {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .btn-lg {
+            width: 100%;
+        }
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bizning Joylashuvimiz</title>
+    <style>
+        :root {
+            --bg-color: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --text-color: #333;
+            --header-bg: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+            --header-text: white;
+            --card-bg: white;
+            --card-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            --card-hover-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            --icon-color: #2575fc;
+            --btn-bg: white;
+            --btn-text: #2575fc;
+            --btn-hover-bg: #f8f9fa;
+        }
+
+        .dark-mode {
+            --bg-color: linear-gradient(135deg, #232526 0%, #414345 100%);
+            --text-color: #f0f0f0;
+            --header-bg: linear-gradient(45deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            --header-text: #e0e0e0;
+            --card-bg: #2d2d2d;
+            --card-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            --card-hover-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            --icon-color: #4da6ff;
+            --btn-bg: #3a3a3a;
+            --btn-text: #e0e0e0;
+            --btn-hover-bg: #4a4a4a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.5s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: var(--header-bg);
+            color: var(--header-text);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        .address {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            animation: slideUp 1s ease-in-out;
+        }
+        
+        .back-btn {
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeIn 1.5s ease-in-out;
+            margin-right: 15px;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            background: var(--btn-hover-bg);
+        }
+        
+        .back-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .map-container {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            margin-top: 40px;
+            transition: all 0.3s ease;
+            height: 500px;
+        }
+        
+        .map-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 50px 0;
+            gap: 20px;
+        }
+        
+        .contact-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            width: 250px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--card-hover-shadow);
+        }
+        
+        .contact-card i {
+            font-size: 2.5rem;
+            color: var(--icon-color);
+            margin-bottom: 15px;
+        }
+        
+        .contact-card h3 {
+            margin: 0 0 10px 0;
+            color: var(--icon-color);
+        }
+
+        .theme-toggle {
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            background: var(--btn-hover-bg);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .address {
+                font-size: 1.2rem;
+            }
+            
+            .map-container {
+                height: 350px;
+            }
+            
+            .contact-card {
+                width: 100%;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bizning Joylashuvimiz</h1>
+            <p class="address">Manzil: Toshkent shahri, Chilonzor tumani</p>
+            <div class="button-group">
+                <button class="back-btn" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i> Orqaga
+                </button>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i> Dark Mode
+                </button>
+            </div>
+        </header>
+        
+        <div class="contact-info">
+            <div class="contact-card">
+                <i class="fas fa-phone-alt"></i>
+                <h3>Telefon</h3>
+                <p>+998 71 123 45 67</p>
+                <p>+998 90 123 45 67</p>
+            </div>
+            
+            <div class="contact-card">
+                <i class="fas fa-envelope"></i>
+                <h3>Elektron Pochta</h3>
+                <p>info@bizningkompaniya.uz</p>
+                <p>support@bizningkompaniya.uz</p>
+            </div>
+            
+            <div class="contact-card">
+                <i class="fas fa-clock"></i>
+                <h3>Ish Soatlari</h3>
+                <p>Dushanba-Juma: 9:00 - 18:00</p>
+                <p>Shanba: 10:00 - 15:00</p>
+            </div>
+        </div>
+        
+        <div class="map-container">
+           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d442.5939792509469!2d69.23053491875167!3d41.28717994358209!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38ae8b28b64ce9af%3A0xd3df36936431c51d!2sUzum%20Market!5e1!3m2!1sru!2s!4v1749794162116!5m2!1sru!2s"
+                width="600"
+                height="450"
+                style="border:0;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+    
+    <script>
+        // Dark/Light mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        let isDarkMode = false;
+
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            enableDarkMode();
+        }
+
+        themeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            if (isDarkMode) {
+                enableDarkMode();
+            } else {
+                disableDarkMode();
+            }
+        });
+
+        function enableDarkMode() {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+            localStorage.setItem('theme', 'dark');
+            isDarkMode = true;
+        }
+
+        function disableDarkMode() {
+            body.classList.remove('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+            localStorage.setItem('theme', 'light');
+            isDarkMode = false;
+        }
+
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            const scrollPosition = window.pageYOffset;
+            header.style.backgroundPositionY = scrollPosition * 0.5 + 'px';
+        });
+        
+        document.querySelectorAll('.contact-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

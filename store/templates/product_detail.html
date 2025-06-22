@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-4">
+                    <div class="text-center">
+                        <img src="{{ product.image.url }}" class="img-fluid rounded-3" 
+                             alt="{{ product.title }}" style="max-height: 500px; object-fit: contain;">
+                    </div>
+                    {% if product.images.all %}
+                    <div class="d-flex mt-3 overflow-auto">
+                        {% for image in product.images.all %}
+                        <img src="{{ image.image.url }}" class="img-thumbnail me-2" 
+                             style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;"
+                             onclick="document.querySelector('.img-fluid').src='{{ image.image.url }}'">
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg h-100">
+                <div class="card-body p-4">
+                    {% if product.discount %}
+                    <span class="badge bg-danger fs-6 mb-3">-{{ product.discount }}% CHEGIRMA</span>
+                    {% endif %}
+                    {% if product.is_new %}
+                    <span class="badge bg-success fs-6 mb-3">YANGI MAHSULOT</span>
+                    {% endif %}
+                    
+                    <h1 class="display-5 fw-bold mb-3">{{ product.title }}</h1>
+                    
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="rating me-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-half text-warning"></i>
+                            <!-- <span class="ms-1">(24 sharhlar)</span> -->
+                        </div>
+                        <span class="text-success">
+                            <i class="bi bi-check-circle-fill"></i> Omborda mavjud
+                        </span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        {% if product.discount %}
+                        <div class="d-flex align-items-center">
+                            <h2 class="text-danger fw-bold me-3">{{ product.discounted_price }} UZS</h2>
+                            <h4 class="text-muted text-decoration-line-through">{{ product.price }} UZS</h4>
+                            <span class="ms-2 badge bg-info text-dark">Siz {{ product.price_difference }} UZS tejadingiz</span>
+                        </div>
+                        {% else %}
+                        <h2 class="fw-bold">{{ product.price }} UZS</h2>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="fw-bold mb-3">Mahsulot tavsifi:</h5>
+                        <p class="lead">{{ product.description }}</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="fw-bold mb-3">Xususiyatlari:</h5>
+                        <ul class="list-group list-group-flush">
+                            {% for spec in product.specifications.all %}
+                            <li class="list-group-item bg-transparent d-flex justify-content-between px-0">
+                                <span>{{ spec.name }}</span>
+                                <span class="fw-bold">{{ spec.value }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Savatga qo‘shish</button>
+                    </form>
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="input-group me-3" style="width: 140px;">
+                            <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity()">-</button>
+                            <input type="number" class="form-control text-center" value="1" min="1" id="quantity">
+                            <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity()">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button onclick="history.back()" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i> Orqaga
+                        </button>
+                        <div>
+                            <form method="post" action="{% url 'like_toggle' product.pk %}">
+                                {% csrf_token %}
+                                {% if user in product.liked_by.all %}
+                                    <button type="submit" class="btn btn-outline-danger me-2">
+                                    <i class="bi bi-heart-fill"></i> Saqlandi
+                                    </button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-outline-secondary me-2">
+                                    <i class="bi bi-heart"></i> Saqlash
+                                    </button>
+                                {% endif %}
+                                </form>
+                            <button class="btn btn-outline-primary">
+                                <i class="bi bi-share"></i> Ulashish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Related Products -->
+    <div class="mt-5">
+        <h3 class="fw-bold mb-4">Shu kabi mahsulotlar</h3>
+        <div class="row">
+            {% for related in related_products %}
+            <div class="col-lg-3 col-md-4 col-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <a href="{% url 'product_detail' related.id %}">
+                        <img src="{{ related.image.url }}" class="card-img-top" 
+                             alt="{{ related.title }}" style="height: 200px; object-fit: contain;">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'product_detail' related.id %}" class="text-decoration-none text-dark">
+                                {{ related.title|truncatechars:40 }}
+                            </a>
+                        </h5>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold">{{ related.price }} UZS</span>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function increaseQuantity() {
+        const quantityInput = document.getElementById('quantity');
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+    }
+    
+    function decreaseQuantity() {
+        const quantityInput = document.getElementById('quantity');
+        if (parseInt(quantityInput.value) > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+    }
+    
+    // Initialize image gallery
+    document.addEventListener('DOMContentLoaded', function() {
+        const thumbnails = document.querySelectorAll('.img-thumbnail');
+        if (thumbnails.length > 0) {
+            thumbnails[0].classList.add('border-primary');
+        }
+        
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                thumbnails.forEach(t => t.classList.remove('border-primary'));
+                this.classList.add('border-primary');
+            });
+        });
+    });
+</script>
+
+<style>
+    .rating {
+        font-size: 1.2rem;
+    }
+    
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    .input-group button {
+        width: 40px;
+    }
+    
+    .img-thumbnail {
+        transition: all 0.3s ease;
+    }
+    
+    .img-thumbnail:hover {
+        transform: scale(1.1);
+    }
+    
+    .border-primary {
+        border: 2px solid #0d6efd !important;
+    }
+</style>
+{% endblock %}

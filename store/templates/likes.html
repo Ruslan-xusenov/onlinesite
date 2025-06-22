@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Yoqtirganlar{% endblock %}
+
+{% block content %}
+<style>
+  .likes-container {
+    padding: 4rem 0;
+    min-height: 80vh;
+  }
+
+  .like-card {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease;
+  }
+
+  .dark-theme .like-card {
+    background-color: rgba(30, 41, 59, 0.9);
+    color: #f8f9fa;
+  }
+
+  .like-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .like-card img {
+    max-height: 200px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+  }
+
+  .like-card h5 {
+    font-weight: 600;
+  }
+</style>
+
+<div class="container likes-container">
+  <h2 class="text-center mb-5">💖 Yoqtirgan Mahsulotlaringiz</h2>
+
+  <div class="row g-4">
+    {% if liked_products %}
+      {% for product in liked_products %}
+        <div class="col-md-4">
+          <div class="like-card text-center p-3">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+            <h5 class="mt-3">{{ product.name }}</h5>
+            <p class="text-muted">{{ product.description|truncatewords:15 }}</p>
+            <p class="fw-bold text-success">{{ product.price }} so‘m</p>
+            <a href="{% url 'product_detail' product.pk %}" class="btn btn-sm btn-outline-primary">Batafsil</a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="col-12 text-center">
+        <p class="lead">😔 Siz hali hech qanday mahsulotni yoqtirmagansiz.</p>
+        <a href="{% url 'all_products' %}" class="btn btn-primary mt-2">🛍 Mahsulotlarni ko‘rish</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

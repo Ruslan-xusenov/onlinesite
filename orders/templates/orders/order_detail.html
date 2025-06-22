@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block title %}Buyurtma #{{ order.id }} - Tafsilotlar{% endblock %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="fw-bold mb-0">
+                    <i class="bi bi-receipt text-primary me-3"></i> Buyurtma #{{ order.id }}
+                </h1>
+                <a href="{% url 'order_history' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i> Orqaga
+                </a>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0 fw-bold">
+                                <i class="bi bi-info-circle me-2"></i> Buyurtma ma'lumotlari
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <div class="me-4">
+                                    <p class="text-muted mb-1">Sana</p>
+                                    <p class="fw-bold">{{ order.created|date:"d.m.Y H:i" }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-muted mb-1">Holat</p>
+                                    <span class="badge bg-{% if order.status == 'Yangi' %}info{% elif order.status == 'Qabul qilindi' %}success{% elif order.status == 'Bekor qilindi' %}danger{% else %}warning{% endif %} rounded-pill p-2">
+                                        {{ order.status }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted mb-1">To'lov holati</p>
+                                {% if order.paid %}
+                                    <span class="badge bg-success rounded-pill p-2">
+                                        <i class="bi bi-check-circle-fill me-1"></i> To'langan
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary rounded-pill p-2">
+                                        <i class="bi bi-x-circle-fill me-1"></i> To'lanmagan
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0 fw-bold">
+                                <i class="bi bi-truck me-2"></i> Yetkazib berish ma'lumotlari
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <p class="text-muted mb-1">Ism</p>
+                                <p class="fw-bold">{{ order.first_name }} {{ order.last_name }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted mb-1">Manzil</p>
+                                <p class="fw-bold">{{ order.address }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted mb-1">Telefon</p>
+                                <p class="fw-bold">{{ order.phone }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-cart-check me-2"></i> Buyurtma tarkibi
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="py-3 px-4">Mahsulot</th>
+                                    <th class="py-3 px-4 text-center">Soni</th>
+                                    <th class="py-3 px-4 text-end">Narxi</th>
+                                    <th class="py-3 px-4 text-end">Jami</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items.all %}
+                                <tr>
+                                    <td class="py-3 px-4">
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" 
+                                                class="img-fluid rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                            <div>
+                                                <h6 class="mb-0">{{ item.product.name }}</h6>
+                                                <small class="text-muted">{{ item.product.category.name }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 px-4 text-center">
+                                        {{ item.quantity }}
+                                    </td>
+                                    <td class="py-3 px-4 text-end">
+                                        {{ item.price|floatformat:"0" }} so'm
+                                    </td>
+                                    <td class="py-3 px-4 text-end fw-bold">
+                                        {{ item.get_cost|floatformat:"0" }} so'm
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="fw-semibold">Mahsulotlar:</span>
+                                <span>{{ order.get_total_quantity }} ta</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="fw-semibold">Yetkazib berish:</span>
+                                <span>30 000 so'm</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 fw-bold">Umumiy summa:</h5>
+                                <h4 class="mb-0 text-primary">{{ order.get_total_cost|floatformat:"0" }} so'm</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .badge {
+        font-weight: 500;
+        padding: 0.35em 0.65em;
+    }
+    
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+        color: #6c757d;
+    }
+    
+    @media (max-width: 768px) {
+        .d-flex.justify-content-between {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .btn-outline-secondary {
+            width: 100%;
+        }
+    }
+</style>
+
+{% endblock %}
